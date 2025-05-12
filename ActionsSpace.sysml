@@ -3,7 +3,8 @@ package ActionsSpace{
     private import ScalarValues::*;
 
     private import StructuralElements::*; 
-    private import Requirements::*; 
+    private import RequirementsSpace::*;
+    private import Verefication::*;
   
     action def operationalAction{
         in environement:Environment;

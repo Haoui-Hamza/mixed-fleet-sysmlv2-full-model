@@ -1,8 +1,9 @@
-package Requirements{
+package RequirementsSpace{
 
     private import ScalarValues::*;
     private import StructuralElements::*;
     private import MixedFleet::*;
+    private import VerificationCases::*;
 
     // --- Constraints ---
 
@@ -47,7 +48,7 @@ package Requirements{
         }
     }
 
-    requirement  <'E.1'> EnvironementRequirement : EnvironementRequirementDef{
+    requirement EnvironementRequirement : EnvironementRequirementDef{
         subject environment:Environment;
 
         attribute :>> operationalStatus = environment.operationalStatus;
