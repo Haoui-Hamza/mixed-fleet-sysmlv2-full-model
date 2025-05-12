@@ -1,13 +1,16 @@
 package StructuralElements {
     private import ScalarValues::*;
     private import ActionsSpace::*;
-    private import Requirements::*;
+    private import RequirementsSpace::*;
+
      // Abstract base class for all Stackholders
     part def Person {
         ref item parent[2] : Person;
         ref item mother : Person[1..1] subsets parent;
         attribute numberOfChildren : Natural;
         ref item children[0..numberOfChildren] : Person;
+
+        
     }
 
     // Items: class of identifiable objects that may be acted on over time, but do not necessarily perform actions themselves.
@@ -41,6 +44,7 @@ package StructuralElements {
        attribute id : String; // Unique identifier for the vehicle
         attribute position : Coordinate; // Current spatial position of the vehicle
         attribute autonomyLevel: Real; // 0 = manual, 1 = assisted, 2 = fully autonomous
+        attribute currentLocation:Coordinate;
     }
     part def Agv specializes Vehicle {
        attribute liftingCapacity : ISQ::MassValue;
@@ -53,11 +57,13 @@ package StructuralElements {
     part def Crane specializes Vehicle {
         attribute liftingCapacity : ISQ::MassValue; 
         attribute reachLength : ISQ::LengthValue; // Horizontal reach of the crane's arm
-        
+        action unload_container:S_Unload;
     }
     part def Forklift specializes Vehicle {
         attribute liftingCapacity : ISQ::MassValue; // Max weight the forklift can lift
         attribute forkHeight : ISQ::LengthValue; // Height range of the fork for lifting
+        action  shuffle_containers : S_Shuffle;
+        action load_container : S_Load;
     }
     // Truck used for transporting containers within or outside the port
     part def Truck specializes Vehicle {

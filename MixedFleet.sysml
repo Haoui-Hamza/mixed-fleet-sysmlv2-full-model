@@ -1,12 +1,10 @@
 package MixedFleet {
     private import ScalarValues::*;
     private import StructuralElements::*;
-    private import Requirements::*;
+    private import RequirementsSpace::*;
     private import ActionsSpace::*;
-    
-    
-     
-
+    private import Verefication::*;
+    private import VerificationCases::*;
     // --- Services already defined separately (S_Unload, S_Move, S_Shuffle, S_Load) ---
     // Now we define the higher-level "Normal Operation" action:
     action  NormalOperation{
@@ -19,6 +17,7 @@ package MixedFleet {
         in truckId: String;
         in environement: Environment;
         in transportUnitId: String;
+        in vehicle : Vehicle;
         out status: ActionResponse;
 
     
@@ -51,12 +50,33 @@ package MixedFleet {
         }
 
         first start ;
-            then unloadContainer;
-            then moveContainer;
-            then shuffleContainers;
-            then loadContainer;
-        then done;
-    }
+            then 
+                perform unloadContainer;
+           
+            then
+                perform moveContainer;
+            then  
+                perform VehicleMouvementTest{
+                    :>> destination = moveContainer.toLocation;
+                    :>> currentLocation = vehicle.currentLocation;
+                    :>> status=status ;
+                }
+            if  VehicleMouvementTest == VerdictKind::pass
+            {
+                perform shuffleContainers;
+            }else{
+                // some behaviour for error recovery from vehicle not able to move
+            }
+            then 
+                perform loadContainer;
 
+        then done;
+
+        metadata def ToolConfig {
+            attribute toolName : String;
+            attribute uri : String;
+        }
+     
+    }
     
 }
