@@ -3,26 +3,32 @@ package Verefication{
     private import StructuralElements::*; 
     private import RequirementsSpace::*;     
     private import VerificationCases::*;
-
-    part testVehicle:Vehicle{
-
-    }
+    private import ActionsSpace::* ;
+    
 
     verification def VehicleMouvementTestDefinition {
-        subject vehicle : Vehicle;
+       
+        subject testVehicle : Vehicle;
 
         in destination:Coordinate;
-        in currentLocation:Coordinate;
         in status:ActionResponse;
 
         objective VehicleArrivedToLocation {
+            doc /* Tests whether a vehicle has successfully moved to its intended destination.
+            * It defines an objective called VehicleArrivedToLocation that verifies the R_Move_Container requirement */
+
             // The subject of the verify is automatically bound to "testVehicle".
             verify R_Move_Container ;
         }
-        return verdict : VerdictKind =PassIf(destination==currentLocation and status==ActionResponse::Success );  
+        action evaluateData {
+            in destination = destination;
+            in currentLocation = testVehicle.currentLocation ;
+            in status = status ;
+            out verdict : VerdictKind = PassIf(destination==currentLocation and status==ActionResponse::Success );
+        };
+
+        return verdict : VerdictKind = evaluateData.verdict;
     }
 
-    verification VehicleMouvementTest:VehicleMouvementTestDefinition{
-        subject vehicle :> testVehicle;
-    }
+
 }
