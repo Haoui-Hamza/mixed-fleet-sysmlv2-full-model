@@ -41,13 +41,12 @@ package StructuralElements {
     }
 
     part def Vehicle {
-       attribute id : String; // Unique identifier for the vehicle
-        attribute position : Coordinate; // Current spatial position of the vehicle
+        attribute id : String; // Unique identifier for the vehicle
         attribute autonomyLevel: Real; // 0 = manual, 1 = assisted, 2 = fully autonomous
         attribute currentLocation:Coordinate;
     }
     part def Agv specializes Vehicle {
-       attribute liftingCapacity : ISQ::MassValue;
+       attribute liftingCapacity :> ISQ::mass;
     }
 
     part def Uav specializes Vehicle {
@@ -74,6 +73,7 @@ package StructuralElements {
         attribute dockedLocation : Coordinate;
         attribute capacity : Integer;
     }
+
 
     // Data types definitions
     attribute def Coordinate {
